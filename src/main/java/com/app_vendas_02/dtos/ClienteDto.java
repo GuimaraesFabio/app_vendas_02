@@ -6,12 +6,14 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 import com.app_vendas_02.domains.Cliente;
+import com.app_vendas_02.services_validation.ClienteUpdate;
 
 import org.hibernate.validator.constraints.Length;
 
 /**
  * ClienteDto
  */
+@ClienteUpdate
 public class ClienteDto implements Serializable {
 
     /**
