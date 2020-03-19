@@ -2,6 +2,8 @@ package com.app_vendas_02.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import com.app_vendas_02.domains.Cliente;
 import com.app_vendas_02.dtos.ClienteDto;
 import com.app_vendas_02.services.ClienteService;
@@ -41,7 +43,7 @@ public class ClienteController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Void> update(@RequestBody ClienteDto objDto, @PathVariable Integer id) {
+    public ResponseEntity<Void> update(@Valid @RequestBody ClienteDto objDto, @PathVariable Integer id) {
         Cliente obj = _service.fromDto(objDto);
         obj.setId(id);
         _service.update(obj);

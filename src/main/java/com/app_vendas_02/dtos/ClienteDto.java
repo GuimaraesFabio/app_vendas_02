@@ -2,7 +2,12 @@ package com.app_vendas_02.dtos;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
 import com.app_vendas_02.domains.Cliente;
+
+import org.hibernate.validator.constraints.Length;
 
 /**
  * ClienteDto
@@ -13,9 +18,13 @@ public class ClienteDto implements Serializable {
      *
      */
     private static final long serialVersionUID = 1L;
-    
+
     private Integer id;
+    @NotEmpty(message = "Campo obrigatório")
+    @Length(min = 5, max = 80, message = "Tamanho do campo nome deve ser de 5 a 80 caracteres.")
     private String nome;
+    @NotEmpty(message = "Campo obrigatório")
+    @Email(message = "Email invalido.")
     private String email;
 
     public ClienteDto() {
