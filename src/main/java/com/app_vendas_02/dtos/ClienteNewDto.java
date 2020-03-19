@@ -4,11 +4,15 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotEmpty;
 
+import com.app_vendas_02.services_validation.ClienteInsert;
+
 import org.hibernate.validator.constraints.Length;
 
 /**
  * ClienteNewDto
  */
+
+@ClienteInsert
 public class ClienteNewDto implements Serializable {
 
     /**
