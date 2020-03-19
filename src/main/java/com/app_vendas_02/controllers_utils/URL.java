@@ -1,0 +1,27 @@
+package com.app_vendas_02.controllers_utils;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * URL
+ */
+public class URL {
+
+    public static List<Integer> listToInt(String s) {
+
+        return Arrays.asList(s.split(",")).stream().map(x -> Integer.parseInt(x)).collect(Collectors.toList());
+    }
+
+    public static String decodeParam(String s) {
+
+        try {
+            return URLDecoder.decode(s, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return "";
+        }
+    }
+}
