@@ -6,9 +6,11 @@ import java.util.Optional;
 import com.app_vendas_02.domains.Cliente;
 import com.app_vendas_02.dtos.ClienteDto;
 import com.app_vendas_02.repositories.ClienteRepository;
+import com.app_vendas_02.services_exceptions.DataIntegrityException;
 import com.app_vendas_02.services_exceptions.ObjectNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -33,6 +35,15 @@ public class ClienteService {
         Cliente newObj = findById(obj.getId());
         updateData(newObj, obj);
         return _repository.save(newObj);
+    }
+
+    public void delete(Integer id) {
+        findById(id);
+        try {
+            _repository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityException("Erro ao excluir o cliente, pois existem pedidos pedentes.");
+        }
     }
 
     private void updateData(Cliente newObj, Cliente obj) {
