@@ -3,11 +3,13 @@ package com.app_vendas_02.domains;
 import javax.persistence.Entity;
 
 import com.app_vendas_02.enums.EstadoPagamento;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * PagamentoComCartao
  */
 @Entity
+@JsonTypeName("pagamentoComCartao")
 public class PagamentoComCartao extends Pagamento {
 
     /**

@@ -3,7 +3,6 @@ package com.app_vendas_02.controllers;
 import java.util.List;
 
 import com.app_vendas_02.controllers_utils.URL;
-import com.app_vendas_02.domains.Categoria;
 import com.app_vendas_02.domains.Produto;
 import com.app_vendas_02.dtos.ProdutoDto;
 import com.app_vendas_02.services.ProdutoService;

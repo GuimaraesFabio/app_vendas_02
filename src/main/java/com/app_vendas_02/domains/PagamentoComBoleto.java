@@ -5,12 +5,14 @@ import java.util.Date;
 import javax.persistence.Entity;
 
 import com.app_vendas_02.enums.EstadoPagamento;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * PagamentoComBoleto
  */
 
- @Entity
+@Entity
+@JsonTypeName("pagamentoComBoleto")
 public class PagamentoComBoleto extends Pagamento {
 
     /**
