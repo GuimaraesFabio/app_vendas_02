@@ -23,55 +23,61 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PedidoService {
 
-    @Autowired
-    private PedidoRepository _repository;
+	@Autowired
+	private PedidoRepository _repository;
 
-    @Autowired
-    private BoletoService _boletoService;
+	@Autowired
+	private BoletoService _boletoService;
 
-    @Autowired
-    private PagamentoRepository _pagamentoRepository;
+	@Autowired
+	private PagamentoRepository _pagamentoRepository;
 
-    @Autowired
-    private ProdutoService _produtoService;
+	@Autowired
+	private ProdutoService _produtoService;
 
-    @Autowired
-    private ItemPedidoRepository _itemPedidoRepository;
+	@Autowired
+	private ItemPedidoRepository _itemPedidoRepository;
+	
+	@Autowired
+	private ClienteService _clienteService;
 
-    public List<Pedido> findAll() {
-        return _repository.findAll();
-    }
+	public List<Pedido> findAll() {
+		return _repository.findAll();
+	}
 
-    public Pedido findById(Integer id) {
-        Optional<Pedido> obj = _repository.findById(id);
-        return obj.orElseThrow(() -> new ObjectNotFoundException("Object not found"));
-    }
+	public Pedido findById(Integer id) {
+		Optional<Pedido> obj = _repository.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException("Object not found"));
+	}
 
-    @Transactional
-    public Pedido insert(Pedido obj) {
+	@Transactional
+	public Pedido insert(Pedido obj) {
 
-        obj.setId(null);
-        obj.setInstante(new Date());
-        obj.getPagamento().setDescricao(EstadoPagamento.PENDENTE);
-        obj.getPagamento().setPedido(obj);
+		obj.setId(null);
+		obj.setInstante(new Date());
+		obj.getCliente().setNome(_clienteService.findById(obj.getCliente().getId()).getNome());
+		obj.getPagamento().setDescricao(EstadoPagamento.PENDENTE);
+		obj.getPagamento().setPedido(obj);
 
-        if (obj.getPagamento() instanceof PagamentoComBoleto) {
-            PagamentoComBoleto pagto = (PagamentoComBoleto) obj.getPagamento();
-            _boletoService.preencherPagamentoComBoleto(pagto, obj.getInstante());
-        }
+		if (obj.getPagamento() instanceof PagamentoComBoleto) {
+			PagamentoComBoleto pagto = (PagamentoComBoleto) obj.getPagamento();
+			_boletoService.preencherPagamentoComBoleto(pagto, obj.getInstante());
+		}
 
-        obj = _repository.save(obj);
-        _pagamentoRepository.save(obj.getPagamento());
+		obj = _repository.save(obj);
+		_pagamentoRepository.save(obj.getPagamento());
 
-        for (ItemPedido ip : obj.getItens()) {
+		for (ItemPedido ip : obj.getItens()) {
 
-            ip.setDesconto(0.0);
-            ip.setPreco(_produtoService.findById(ip.getProduto().getId()).getPreco());
-            ip.setPedido(obj);
-        }
+			ip.setDesconto(0.0);
+			ip.setProduto(_produtoService.findById(ip.getProduto().getId()));
+			ip.setPreco(ip.getProduto().getPreco());
+			ip.setPedido(obj);
+		}
 
-        _itemPedidoRepository.saveAll(obj.getItens());
-        return obj;
+		_itemPedidoRepository.saveAll(obj.getItens());
+		System.out.println(obj.toString());
+		return obj;
 
-    }
+	}
 }
